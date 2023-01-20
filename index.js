@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const userModel = require('./models');
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 const mongoDBAppConnectionURL =
   'mongodb+srv://juliozeledon:umWniG99Gl1mjMsE@dnaturebi.5ztmana.mongodb.net/dnaturedb?retryWrites=true&w=majority';
