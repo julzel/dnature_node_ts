@@ -29,10 +29,31 @@ db.once('open', function () {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/details', async (req, res) => {
+app.get('/', async (req, res) => {
   // const user = await userModel.findOne({id: 123});
   const user = await userModel.find({});
   res.send(user);
+});
+
+app.post('/login', (req, res) => {
+  User.findOne(
+    { email: req.body.email, password: req.body.password },
+    (err, user) => {
+      if (err) {
+        res.status(500).send(err);
+      } else if (!user) {
+        res.status(401).send({ error: 'Invalid email or password' });
+      } else {
+        const payload = {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+        };
+        const token = jwt.sign(payload, SECRET_KEY);
+        res.send({ token });
+      }
+    }
+  );
 });
 
 app.listen(port, () =>
